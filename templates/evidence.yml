@@ -1,0 +1,24 @@
+# 证据清单。生成方式见 prd/04-spec-contract.md §5。
+# AC 超过 8 条、或跨多次会话收口时使用；否则证据直接写进 spec 正文。
+report:
+  spec_id: <ID>
+  spec_path: specs/<ID>/spec.md
+  head_sha: <git sha>
+  report_date: <YYYY-MM-DD>
+  stage: pre_merge        # pre_merge | pre_release
+ac_matrix:
+  - ac_id: AC-1
+    status: met           # met | unmet | deleted
+    evidence:
+      - kind: test        # test | script | code | cmd
+        ref: <path>
+        description: "<这条证据证明了什么，一句话>"
+    resolution: null      # 非 met 时必填：立即做 / 删除 / 拒绝，三选一
+summary:
+  met: 0
+  unmet: 0
+  deleted: 0
+contract_drift_check:
+  - contract: "<Invariant 原文>"
+    consumers_checked: []
+    result: ""

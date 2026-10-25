@@ -1,0 +1,19 @@
+{
+  "name": "augean",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Project Memory Framework — spec bundle plus the @gwenlita52299/augean DSH plugin that governs it.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test pmf/test/*.test.mjs",
+    "check": "node pmf/bin/pmf.mjs check --root .",
+    "retention": "node pmf/bin/pmf.mjs retention --root .",
+    "explain": "node explainers/build-pmf-overview.mjs",
+    "pack": "mkdir -p dist && npm pack ./pmf --pack-destination ./dist",
+    "verify": "npm run test && npm run check"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "@gwenlita52299/augean",
+  "version": "0.2.0",
+  "description": "Project Memory Framework for DSH: doc frontmatter, AC-to-test close gate, retention-based cleanup. Zero config.",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "spec-driven",
+    "documentation",
+    "docs-governance",
+    "retention",
+    "agent"
+  ],
+  "license": "MIT",
+  "author": "fairy",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./core": "./lib/api.js",
+    "./skills": "./skills.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "bin": {
+    "pmf": "./bin/pmf.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "index.js",
+    "skills.js",
+    "lib/*.js",
+    "skills/*.md",
+    "bin/*.mjs",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "prepublishOnly": "node --test test/*.test.mjs"
+  },
+  "homepage": "https://github.com/Gwenlita52299/Augean",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gwenlita52299/Augean.git"
+  }
+}

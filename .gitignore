@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# 机器状态：每次 expire 都会变，不进版本库
+.pmf-state.json
+docs/.pmf-state.json

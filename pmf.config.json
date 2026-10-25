@@ -1,0 +1,8 @@
+{
+  "docsRoot": ".",
+  "exclude": ["pmf", "node_modules", ".git", "templates"],
+  "retention": {
+    "mode": "fixed",
+    "fixed": { "spec": 30, "design": 60, "prd": 60, "note": 30, "explainer": 60 }
+  }
+}
