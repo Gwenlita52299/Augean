@@ -1,11 +1,15 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, relative, resolve, sep } from 'node:path'
+import { changedFiles } from './changed.js'
 import { checkDocs } from './check.js'
+import { CORE_VERSION, satisfies } from './version.js'
 import { docsDir, loadConfig } from './config.js'
 import { checkEvidence } from './evidence.js'
 import { applyExpiry, planExpiry, tombstonesPath } from './expire.js'
 import { gitLambda, readState, resolveMode, retentionDays, writeState } from './retention.js'
 import { scanDocs } from './scan.js'
+
+export { CORE_VERSION, SCHEMA_VERSION } from './version.js'
 
 const DAY_MS = 86400000
 
@@ -22,14 +26,46 @@ export function context(root, { now = Date.now() } = {}) {
   return { root, config, configPath: path, scan, dir: docsDir(root, config), measured, modeInfo, now }
 }
 
-export function check(root, { now } = {}) {
+/**
+ * @param {object} [options]
+ * @param {boolean} [options.changedOnly] report only violations in files git sees as changed
+ * @param {string}  [options.since] with changedOnly: compare <since>...HEAD instead of the staged set
+ */
+export function check(root, { now, changedOnly = false, since = null } = {}) {
   const ctx = context(root, { now })
+  // The scan stays full even in changed-only mode: id uniqueness and related ids
+  // are only decidable against the whole set. Only the report is narrowed.
+  const result = checkDocs(ctx.scan, ctx.config)
+  let { violations } = result
+  let changed = null
+  if (changedOnly) {
+    const files = changedFiles(root, { since })
+    changed = files.size
+    violations = violations.filter((item) => files.has(resolve(ctx.dir, item.file)))
+  }
+
+  const requires = ctx.config.requires
+  if (requires) {
+    const verdict = satisfies(CORE_VERSION, requires)
+    if (!verdict.ok) {
+      const file = ctx.configPath ? relative(ctx.dir, ctx.configPath).split(sep).join('/') : 'pmf.config.json'
+      violations = [{ level: 'error', code: 'CORE_VERSION', file, message: verdict.reason }, ...violations]
+    }
+  }
+
+  const errors = violations.filter((item) => item.level === 'error')
+  const warnings = violations.filter((item) => item.level === 'warn')
   return {
-    ...checkDocs(ctx.scan, ctx.config),
+    violations,
+    errors,
+    warnings,
+    ok: errors.length === 0,
     docs: ctx.scan.docs.length,
     docsDir: ctx.dir,
     docsPresent: existsSync(ctx.dir),
     configPath: ctx.configPath,
+    coreVersion: CORE_VERSION,
+    changed,
   }
 }
 

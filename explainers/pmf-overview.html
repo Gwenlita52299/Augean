@@ -4,9 +4,9 @@ doc_kind: explainer
 id: EXPLAINER-pmf-overview
 status: active
 created: 2026-10-25
-updated: 2026-10-25
+updated: 2026-10-31
 owner: fairy
-source_sha: 704b859e9718
+source_sha: 947179c70630
 source_paths: [prd, decisions, pmf/lib, pmf/skills, README.md, GLOSSARY.md, pmf/index.js]
 regen: node explainers/build-pmf-overview.mjs
 cost: cheap
@@ -323,7 +323,7 @@ retention.mode = dynamic 显式开启。只统计 enabled_at 之后的数据</co
   <tbody>
     <tr><td><code>cost</code></td><td>cheap</td><td>重建成本低</td></tr>
     <tr><td><code>regen</code></td><td><code>node explainers/build-pmf-overview.mjs</code></td><td>一条命令重建</td></tr>
-    <tr><td><code>source_sha</code></td><td><code>704b859e9718</code></td><td>源文件指纹，变了即失效</td></tr>
+    <tr><td><code>source_sha</code></td><td><code>947179c70630</code></td><td>源文件指纹，变了即失效</td></tr>
     <tr><td>保留期</td><td><strong>R = 0</strong></td><td>源一变就该重建；不重建就删</td></tr>
   </tbody>
 </table>
@@ -331,7 +331,7 @@ retention.mode = dynamic 显式开启。只统计 enabled_at 之后的数据</co
 <p>换句话说：<strong>这页的正确结局是被删掉或被重新生成，而不是被小心翼翼地维护。</strong> 如果它开始和代码不一致，那不是文档事故，那是它在按设计执行。</p>
 
 <footer>
-  <p>生成于 2026-10-25 · source <code>704b859e9718</code> · 重建：<code>node explainers/build-pmf-overview.mjs</code></p>
+  <p>生成于 2026-10-31 · source <code>947179c70630</code> · 重建：<code>node explainers/build-pmf-overview.mjs</code></p>
   <p>本页由 <code>explainers/build-pmf-overview.mjs</code> 生成，请勿手改。框架说明见 <a href="../README.md">README</a>，生命周期见 <a href="../prd/03-lifecycle.md">03-lifecycle.md</a>。</p>
 </footer>
 

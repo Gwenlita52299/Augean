@@ -3,7 +3,7 @@ doc_kind: spec
 id: PMF-SPEC-005
 status: draft
 created: 2026-10-25
-updated: 2026-10-25
+updated: 2026-10-31
 owner: fairy
 related: [PMF-SPEC-003, PMF-SPEC-004]
 ---
@@ -162,7 +162,7 @@ R = clamp((N_target ÷ λ) × m_kind × w(C), 3, 90)
 | P0 | **已实现** | `check`：frontmatter 必填、枚举、日期、ID 唯一、断链、related 解析、禁用词 |
 | P1 | **已实现** | `index`（`INDEX.md` + `.doc-index.json`）+ 四个 skill（`spec-write` / `spec-close` / `spec-sync` / `spec-gc`） |
 | P2 | **已实现** | `retention` / `expire` / 墓碑 / 开关 |
-| P3 | 未开始 | 证据细校、baseline、CI 定时删除 PR |
+| P3 | 部分 | `check --changed-only` 与 `pmf hooks install` 已实现（§4 的 pre-commit / pre-push）；证据细校、baseline、CI 定时删除 PR 未开始。多端方案见 [08](08-multi-surface.md) |
 
 **九个实现偏差**（代码是事实，文档已按此校正）
 
@@ -180,6 +180,7 @@ R = clamp((N_target ÷ λ) × m_kind × w(C), 3, 90)
 12. 零配置靠 root 解析顺序：显式参数 → 插件配置 → **会话 `workingDirectory`** → 进程 cwd。因此不传 `root` 也能作用于用户当前打开的项目，无需任何配置文件。
 13. 发布形态为 npm 包 `@gwenlita52299/augean`（`files` 白名单 22 项，含 `skills/`、`locale/`、`icon.svg`），安装入口是 `dsh plugin add` 或 Web 的 Plugins 页；离线走 `dist/*.tgz`。包内不含测试与文档，测试在 `prepublishOnly` 里跑。
 14. 目标目录没有 `docs/` 时不静默通过：明确报「没有 docs 目录，什么都没检查」。空集通过是假检查的典型形态。
+15. `--changed-only` 只收窄**报告**、不收窄扫描：ID 唯一、`related` 解析需要全集才能判定。删除文件导致的他处断链不在 staged 集里，由 pre-push 的全量检查兜底。
 
 **一个被实现推翻的检查规则**
 
