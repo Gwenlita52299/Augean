@@ -40,6 +40,7 @@
     "index.js",
     "skills.js",
     "lib/*.js",
+    "adapters/*.js",
     "skills/*.md",
     "bin/*.mjs",
     "cordis.patch.yml",

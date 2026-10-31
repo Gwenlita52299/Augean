@@ -46,7 +46,7 @@ dsh plugin add ./dist/*.tgz
 
 发布后 profile 里是真实目录拷贝，不是源码链接——所以**改 `pmf/**` 对已装副本无效**，要么发新版本，要么改用目录安装联调。
 
-装完可用 `pmf` 命令冒烟：`pmf check --root .`。
+装完可用 `pmf` 命令冒烟：`pmf check --root .`。本地提交前拦截：`pmf hooks install`（不会覆盖你已有的钩子）。
 
 > npm 新包名不允许大写字母，所以 scope 与包名都是小写（`Gwenlita52299` → `gwenlita52299`，`Augean` → `augean`）。首次发布：`cd pmf && npm publish`，需要先在 npm 上创建或确认该 scope 归你所有。
 
@@ -62,7 +62,9 @@ dsh plugin add ./dist/*.tgz
 | [prd/05-tooling.md](prd/05-tooling.md) | 七个命令分别做什么，哪些规则被强制 | 实现者 |
 | [prd/06-rollout.md](prd/06-rollout.md) | 怎么在存量项目上落地、怎么度量、会怎么失败 | 落地负责人 |
 | [prd/07-open-questions.md](prd/07-open-questions.md) | 还没定的 8 个问题 | 所有人 |
+| [prd/08-multi-surface.md](prd/08-multi-surface.md) | 怎么从单端（DSH）扩到多端：三份契约、各端分工、落地顺序 | 实现者 |
 | [decisions/0001-spec-as-snapshot.md](decisions/0001-spec-as-snapshot.md) | 为什么 spec 是可弃快照（改变全局形态的那个决定） | 所有人 |
+| [decisions/0002-write-authority-in-ci.md](decisions/0002-write-authority-in-ci.md) | 多端之下为什么只有 CI 能删文档、改状态 | 所有人 |
 | [GLOSSARY.md](GLOSSARY.md) | 术语定义与禁用同义词 | 写文档时查 |
 
 ## 状态
@@ -80,11 +82,12 @@ dsh plugin add ./dist/*.tgz
 | 入口 | 位置 | 说明 |
 | --- | --- | --- |
 | 检查核心 | [`pmf/lib/`](pmf/lib/) | 只依赖 fs + git，不 import 任何 harness 模块 |
-| CLI | [`pmf/bin/pmf.mjs`](pmf/bin/pmf.mjs) | `check` / `index` / `retention` / `expire` / `evidence` / `enable-dynamic` |
+| CLI | [`pmf/bin/pmf.mjs`](pmf/bin/pmf.mjs) | `check`（含 `--changed-only [--since REF]`）/ `index` / `retention` / `expire` / `evidence` / `enable-dynamic` / `hooks install\|uninstall` / `version`；`--json` 输出都带 `schema_version` |
+| 端适配器 | [`pmf/adapters/`](pmf/adapters/) | 只管「何时跑」：目前是 git 钩子（pre-commit 只查 staged，pre-push 全量）。见 [08](prd/08-multi-surface.md) |
 | 插件 | [`pmf/index.js`](pmf/index.js) | 5 个工具：`pmf_check`、`pmf_evidence`、`pmf_retention`、`pmf_expire`、`pmf_enable_dynamic` |
 | 技能 | [`pmf/skills/`](pmf/skills/) | 4 个：`spec-write`、`spec-close`、`spec-sync`、`spec-gc` |
 | 讲解产物 | [`explainers/pmf-overview.html`](explainers/pmf-overview.html) | 项目说明页，`R=0`，源一变即失效，重建：`node explainers/build-pmf-overview.mjs` |
-| 测试 | [`pmf/test/`](pmf/test/) | 29 项，`cd pmf && node --test test/*.test.mjs` |
+| 测试 | [`pmf/test/`](pmf/test/) | 39 项，`cd pmf && node --test test/*.test.mjs` |
 
 实现与 spec 的六处偏差记在 [05 §6.1](prd/05-tooling.md)。
 

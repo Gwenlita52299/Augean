@@ -3,7 +3,7 @@ doc_kind: spec
 id: PMF-SPEC-007
 status: draft
 created: 2026-10-25
-updated: 2026-10-25
+updated: 2026-10-31
 owner: fairy
 ---
 
@@ -23,6 +23,7 @@ owner: fairy
 | D6 语义 drift | 靠人工 |
 | D7 仓库结构 | 第一版单根 |
 | D8 owner | fairy |
+| D9 多端写权 | 只有 CI 写治理状态，见 [ADR-0002](../decisions/0002-write-authority-in-ci.md) |
 
 ---
 
@@ -70,6 +71,8 @@ owner: fairy
 - 新项目前 8 周没有历史，λ 如何初始化？**开关已部分解决**：`enabled_at` 之后才开始统计，冷却期内继续用 fixed。剩余问题只是冷却期 4 周够不够。
 
 ## 6. 何时从 A 迁到 C
+
+> **2026-10-31 更新**：多端化（[08](08-multi-surface.md)）视为触发了「出现第一个非 DSH 的使用者」，迁移已启动。下面只剩「每周自检」这一条还没落地。
 
 D1 定了「先 A 后 C」，但**迁移触发条件**未定。候选（满足任一）：
 
